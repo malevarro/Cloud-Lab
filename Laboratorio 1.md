@@ -1,69 +1,55 @@
-# Laboratorio 1 - Uso básico de contenedores (Docker)
+# Laboratorio 1 - Primeros Pasos
 
-![dockerlogo](https://www.docker.com/wp-content/uploads/2022/01/Docker-Logo-White-RGB_Horizontal-730x189-1.png)
+![cloudlogo](Images/cloud_computing.jpg)
 
-- [Laboratorio 1 - Uso básico de contenedores (Docker)](#laboratorio-1---uso-básico-de-contenedores-docker)
+- [Laboratorio 1 - Primeros Pasos](#laboratorio-1---primeros-pasos)
   - [Objetivo](#objetivo)
   - [Herramientas a usar](#herramientas-a-usar)
+  - [Proveedores de nube](#proveedores-de-nube)
   - [Procedimiento](#procedimiento)
 
 ## Objetivo
 
-Por medio de la ejecución del siguiente laboratorio se busca afianzar los conocimientos sobre Docker y contenedores, así como su manejo técnico.
+Por medio de la ejecución de este conjunto de actividades se espera afianzar los conceptos básicos de computación en la nube, familiarizarse con el entorno del proveedor de servicios de nube __CSP__ y empezar a realizar actividades de configuración.
 
 ## Herramientas a usar
 
 A continuación se listan las herramientas a utilizar para el laboratorio:
 
-1. Oracle VirtualBox 7.0: se usa como hypervisor para la ejecución de la máquina virtual que posee el entorno de ejecución de Docker.
-2. Oracle VM VirtualBox Extension Pack acorde con la versión del hypervisor
-3. Imagen de máquina virtual Ubuntu Linux 22.04 LTS x64 Bits. Se recomiendas las siguientes características mínimas para la importación de la máquina virtual
-   1. Definir mínimo 2 vCPUs
-   2. 4 GB de memoria RAM
-   3. 80 GB de espacio en disco para almacenamiento definido para la VM.
-4. Los siguientes paquetes instalados en la máquina virtual de Ubuntu Linux:
-   1. Visual Studio Code for Linux. Se puede realizar la instalación mediante el siguiente comando
+1. Explorador de Internet de su preferencia (Chrome, Edge, o Firefox)
+2. Acceso por Internet a uno de los proveedores de servicio de computación en la nube
+3. Cliente para la conexión remota a equipos (Cliente de Escritorio Remoto - RDP)
+4. Cliente para la conexión por SSH a equipos
 
-        ```bash
-           sudo snap install code --classic
-        ```
+## Proveedores de nube
 
-   2. Docker Engine - Community Version 23.0.1. El proceso de instalación se encuentra detallado en la siguiente [guía](https://docs.docker.com/desktop/install/ubuntu/)
-   3. Firefox Web Browser.
+Los proveedores de servicios de computación en la nube que pueden ser incluidos en el desarrollo de la asignatura son los siguientes:
+
+| Nombre | Sitio Web | Logo |
+| --- | --- | --- |
+| Azure | <https://portal.azure.com/> | ![AzureLogo](Images/Microsoft-Azure-Symbol.png)|
+| Amazon Web Services (AWS) | <https://portal.aws.amazon.com/> | ![AWSLogo](Images/AWS-Emblem.png) |
 
 ## Procedimiento
 
-Realizar los siguientes pasos para el desarrollo del procedimiento
+Realizar el siguiente conjunto de actividades para el desarrollo del laboratorio.
 
-1. Ingrese a la máquina virtual de Ubuntu. Las credenciales de acceso se encuentran indicadas en la descripción de la OVA entregada.
-2. Ejecute la línea de comando. Es la aplicación llamada __Terminal__ en el borde izquierdo de la pantalla.
-3. Realice la descarga de la imagen que posee los siguientes pasos del laboratorio. se realiza mediante el siguiente comando
+> __Nota:__ Recuerde documentar por medio de pantallazos la ejecución de las diferentes actividades con el fin de realizar un documento que quede como evidencia del trabajo en equipo. Este documento es el que deberá ser cargado en el espacio de Google Classroom provisto para ello.
 
-    ```bash
-    docker pull docker/getting-started
-    ```
-
-4. Verificar la descarga correcta de la imagen mediante el siguiente comando
-
-    ```bash
-    docker images
-    ```
-
-5. Realice la ejecución de la imagen que contiene los laboratorios mediante el siguiente comando
-
-    ```bash
-    docker run -d -p 80:80 docker/getting-started
-    ```
-
-6. Definir la ruta de trabajo de para los laboratorios en la carpeta '/home/hkuser/workdir'
-
-    ```bash
-    cd /home/hkuser/workdir
-    ```
-
-7. Iniciar Firefox Web Browser e ingresar a __[http://localhost](http://localhost)__
-8. En la página web mostrada arrancar la ejecución del laboratorio desde la sección __Our Application__
-
-    ![OurAPP](./Images/Lab1-OurApp.JPG)
-
-> Nota: recuerde descargar y manipular los archivos en la ruta especificada anteriormente.
+0. Responda las siguientes preguntas
+   1. [__Chequeo 1__](https://learn.microsoft.com/es-mx/training/modules/describe-cloud-compute/7-knowledge-check?ns-enrollment-type=learningpath&ns-enrollment-id=learn.wwl.microsoft-azure-fundamentals-describe-cloud-concepts)
+   2. [__Cheuqeo 2__](https://learn.microsoft.com/en-us/training/modules/describe-cloud-service-types/5-knowledge-check?ns-enrollment-type=learningpath&ns-enrollment-id=learn.wwl.microsoft-azure-fundamentals-describe-cloud-concepts)
+1. Cree la cuenta en el CSP
+   1. Video de guía de creación de cuenta. [Video](https://youtu.be/76tQZYm88JQ?si=YLLNVmUmFATWUAb_)
+   2. Enlace de creación de [cuenta en Azure](https://azure.microsoft.com/es-es/pricing/purchase-options/azure-account)
+   3. Enlace de creación de [cuenta en AWS](https://aws.amazon.com/free/)
+2. Creación de los usuarios
+   1. [Creación de usuarios y grupos de Azure en Microsoft Entra ID](https://learn.microsoft.com/es-mx/training/modules/create-users-and-groups-in-azure-active-directory/)
+3. Protección de los recursos con el control de acceso basado en roles
+   1. [Protección de los recursos de Azure con el control de acceso basado en roles de Azure (Azure RBAC)](https://learn.microsoft.com/es-mx/training/modules/secure-azure-resources-with-rbac/)
+4. Asegurando Acceso con MFA
+   1. [Protección de usuarios de Microsoft Entra con autenticación multifactor](https://learn.microsoft.com/es-mx/training/modules/secure-aad-users-with-mfa/)
+5. Autoservicio de usuarios
+   1. [Permitir que los usuarios restablezcan sus contraseñas con el autoservicio de restablecimiento de contraseña de Microsoft Entra](https://learn.microsoft.com/es-mx/training/modules/allow-users-reset-their-password/)
+6. Gestión de servicios de Nube (management plane)
+   1. [Administración de servicios con Azure Portal](https://learn.microsoft.com/es-mx/training/modules/tour-azure-portal/)
