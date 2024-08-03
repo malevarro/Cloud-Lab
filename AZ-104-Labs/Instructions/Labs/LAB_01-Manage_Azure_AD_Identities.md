@@ -172,7 +172,7 @@ En esta tarea, creará grupos de Azure Active Directory con pertenencia asignada
     | Nombre del grupo | **Administradores del laboratorio de TI** |
     | Descripción del grupo | **Administradores del laboratorio de TI de Contoso** |
     | Tipo de pertenencia | **Asignado** |
-    
+
 1. Haga clic en **No hay miembros seleccionados**.
 
 1. En la hoja **Agregar miembros**, busque y seleccione los grupos **Administradores de la nube de TI** y **Administradores del sistema de TI** y, de nuevo en la hoja **Nuevo grupo**, haga clic en **Crear**.
@@ -186,7 +186,7 @@ En esta tarea, creará grupos de Azure Active Directory con pertenencia asignada
 ## Tarea 3: Creación de un inquilino de Azure Active Directory (AD) (opcional: problema del entorno de laboratorio)
 
 En esta tarea, creará un nuevo inquilino de Azure AD.
-    
+
 1. En Azure Portal, busque y seleccione **Azure Active Directory**.
 
     >**Nota**: Hay un problema conocido con la comprobación de Captcha en el entorno de laboratorio. Si recibe el error **Error de creación. Demasiadas solicitudes, inténtelo de nuevo más tarde**, haga lo siguiente:<br>
