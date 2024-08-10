@@ -109,6 +109,7 @@ CLIENT_ID="el_codigo_que_sale_en_EntraID"
 CLIENT_SECRET="El_valor_del_secreto_creado"
 REDIRECT_URI=http://localhost:5000/getAToken
 SCOPE=User.Read
+ENDPOINT=https://graph.microsoft.com/v1.0/me
 ```
 
 4. Ejecute el siguiente comando para correr la aplicación
@@ -145,6 +146,7 @@ CLIENT_ID="el_codigo_que_sale_en_EntraID"
 CLIENT_SECRET="El_valor_del_secreto_creado"
 REDIRECT_URI=https://"REEMPLAZAR_POR_SU_URL".ngrok-free.app/getAToken
 SCOPE=User.Read
+ENDPOINT=https://graph.microsoft.com/v1.0/me
 ```
 
 11. Modifique el archivo de configuración del servidor web de Python para incluir la URL generada en __ngrok__; para esto debe ir a modificar el archivo _settings.py_. Este archivo esta en la ruta en donde descargo la aplicación con la ayuda de __Git__, para el caso de ejemplo de este laboratorio la ruta sería _c:\apps\ms-identity-python-webapp-django\mysite\settings.py_. En el archivo es necesario modificar los valores de la variable __ALLOWED_HOSTS__ con la URL que usted obtuvo de __ngrok__. un ejemplo es el siguiente:
