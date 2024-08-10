@@ -5,10 +5,12 @@
 - [Laboratorio 2 - Configuración Inicial de los Servicios](#laboratorio-2---configuración-inicial-de-los-servicios)
   - [Objetivo](#objetivo)
   - [Herramientas a usar](#herramientas-a-usar)
+    - [Herramientas Adicionales](#herramientas-adicionales)
   - [Procedimiento](#procedimiento)
     - [Integración de aplicaciones](#integración-de-aplicaciones)
       - [Preparación del ambiente](#preparación-del-ambiente)
       - [Integración vía SAML](#integración-vía-saml)
+      - [Integración vía OIDC (OAuth)](#integración-vía-oidc-oauth)
     - [Implementación de redes virtuales](#implementación-de-redes-virtuales)
 
 ## Objetivo
@@ -24,13 +26,17 @@ A continuación se listan las herramientas a utilizar para el laboratorio:
 | Azure | <https://portal.azure.com/> | ![AzureLogo](Images/Microsoft-Azure-Symbol.png)|
 | Visual Studio Code | <https://code.visualstudio.com/download> | ![VSCodeLogo](Images/vscode.png) |
 | GIT for Windows | <https://gitforwindows.org/> | ![GITLogo](Images/git_logo.png)|
-| Node JS for Windows | <https://nodejs.org/> | ![NodeJSLogo](Images/nodejslogo.jpg)|
+| Python for Windows | <https://www.python.org/> | ![NodeJSLogo](Images/python-logo.png)|
 | ngrok | <https://ngrok.com/> | ![NodeJSLogo](Images/ngrok-blue-med.png)|
+
+### Herramientas Adicionales
 
 1. Explorador de Internet de su preferencia (Chrome, Edge, o Firefox)
 2. Acceso por Internet a uno de los proveedores de servicio de computación en la nube
 3. Cliente para la conexión remota a equipos (Cliente de Escritorio Remoto - RDP)
 4. Cliente para la conexión por SSH a equipos
+
+> __Nota:__ Estas herramientas deben estar instaladas en el equipo o en una máquina virtual de trabajo
 
 ## Procedimiento
 
@@ -48,15 +54,17 @@ Ejecute los siguientes pasos en su equipo o en alguna máquina virtual para el d
 
 1. Vaya a al sitio web de [ngrok](https://ngrok.com/)
 2. Realice la creación de una cuenta en el [sitio web](https://dashboard.ngrok.com/signup)
-3. Descargue el ejecutable de la aplicación. Descomprima el archivo en una carpeta de fácil acceso por terminal (ej. c:\temp).
-4. Abra una línea de comando y ejecute los siguientes comandos:
+3. En el sitio web seleccione la plataforma o sistema operativo que desea usar (ej. Windows)
+
+![ngrok1](./Images/ngrok1.png)
+
+4. Descargue el ejecutable de la aplicación. Descomprima el archivo en una carpeta de fácil acceso por terminal (ej. c:\apps).
+5. Abra una línea de comando y ejecute los siguientes comandos:
 
 ```powershell
-cd c:\temp
+cd c:\apps
 .\ngrok.exe config add-authtoken "token_entregado_en_sitio_web"
 ```
-
-5. 
 
 #### Integración vía SAML
 
@@ -78,6 +86,82 @@ cd c:\temp
    8. Si todo esta correcto, usted será redirigido a una página que contiene toda la información del usuario
     ![SAMLConfig4](./Images/SAMLConfig4.png)
 
+#### Integración vía OIDC (OAuth)
+
+1. Desde una terminal de comandos en el equipo ejecute los siguientes comandos
+
+```powershell
+mkdir c:\apps
+cd c:\apps
+git clone https://github.com/Azure-Samples/ms-identity-python-webapp-django.git
+cd c:\apps\ms-identity-python-webapp-django
+pip install -r requirements.txt
+python manage.py migrate
+cp .\.env.sample.entra-id .\.env
+```
+
+2. En la consola de Azure, ejecute los pasos 1, 2 y 3 que se indican en la siguiente [guía](https://learn.microsoft.com/es-mx/entra/identity-platform/quickstart-web-app-python-flask?tabs=windows)
+3. Con la ayuda de Visual Studio Code o Notepad++ abra el archivo __.env__ que creo en la ruta con la ayuda de los comandos anteriores y modifique su contenido de la siguiente manera
+
+```properties
+AUTHORITY=https://login.microsoftonline.com/"Valor_De_TenantID"
+CLIENT_ID="el_codigo_que_sale_en_EntraID"
+CLIENT_SECRET="El_valor_del_secreto_creado"
+REDIRECT_URI=http://localhost:5000/getAToken
+SCOPE=User.Read
+```
+
+4. Ejecute el siguiente comando para correr la aplicación
+
+```powershell
+python manage.py runserver localhost:5000
+```
+
+5. En el navegador de Internet de su preferencia, abra el sitio [http://localhost:5000](http://localhost:5000)
+6. Si todo esta correcto le pedira la autenticación de su usuario y verá la siguiente página web
+
+![django1](./Images/django1.png)
+
+7. Ahora vamos a publicar la aplicación por medio de un proxy reverso. Para esto se debe ejecutar el servicio de __ngrok__ en la ruta donde se descargó en los pasos anteriores. Desde la linea de comandos ejecutar lo siguiente:
+
+```powershell
+cd c:\apps
+.\ngrok.exe http http://localhost:5000 
+```
+
+8. Con el servicio en ejecución se debe verificar cuál es la URL que ha sido entregada para la aplicación
+
+![ngrok2](./Images/ngrok2.png)
+
+9. Adicione la URL encontrada en el registro de la aplicación hecho en EntraID
+
+![ngrok3](./Images/ngrok3.png)
+
+10. Con la ayuda de Visual Studio Code o Notepad++ abra el archivo __.env__ y modifique el valor de la propiedad "REDIRECT_URI". Debe quedar el archivo de la siguiente manera:
+
+```properties
+AUTHORITY=https://login.microsoftonline.com/"Valor_De_TenantID"
+CLIENT_ID="el_codigo_que_sale_en_EntraID"
+CLIENT_SECRET="El_valor_del_secreto_creado"
+REDIRECT_URI=https://"REEMPLAZAR_POR_SU_URL".ngrok-free.app/getAToken
+SCOPE=User.Read
+```
+
+11. Modifique el archivo de configuración del servidor web de Python para incluir la URL generada en __ngrok__; para esto debe ir a modificar el archivo _settings.py_. Este archivo esta en la ruta en donde descargo la aplicación con la ayuda de __Git__, para el caso de ejemplo de este laboratorio la ruta sería _c:\apps\ms-identity-python-webapp-django\mysite\settings.py_. En el archivo es necesario modificar los valores de la variable __ALLOWED_HOSTS__ con la URL que usted obtuvo de __ngrok__. un ejemplo es el siguiente:
+
+![ngrok4](./Images/ngrok4.png)
+
+12. En la terminal de linea de comando en donde esta ejecutandose el __Python__ se debe para el proceso con _CTRL+C_ y se debe relanzar la tarea con el siguiente comando
+
+```powershell
+cd c:\apps
+.\ngrok.exe http http://localhost:5000 
+```
+
+13. Una vez realizada esta configuración podrá ingresar a la aplicación desde cualquier navegador por medio de la URL de la herramienta de __ngrok__
+
+![ngrok5](./Images/ngrok5.png)
+
 ### Implementación de redes virtuales
 
 En este laboratorio de realizará la implementación de las definiciones de redes virtuales (VNET's o VCN's), se realizarán interconexiones entre ellas y finalmente se hará prueba de una topología de Hub and Spoke. Ejecute los pasos indicados en las siguientes guías:
@@ -85,3 +169,5 @@ En este laboratorio de realizará la implementación de las definiciones de rede
    1. [Implementación de redes virtuales en Azure](./AZ-104-Labs/Instructions/Labs/LAB_04-Implement_Virtual_Networking.md)
    2. [Interconexión entre redes virtuales en Azure](./AZ-104-Labs/Instructions/Labs/LAB_05-Implement_Intersite_Connectivity.md)
    3. [Configuración avanzada del tráfico de red en Azure](./AZ-104-Labs/Instructions/Labs/LAB_06-Implement_Network_Traffic_Management.md)
+
+> __Nota:__ Recuerde realizar y documentar todos los ejercicios de una manera clara y adecuada.
