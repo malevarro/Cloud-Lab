@@ -24,13 +24,13 @@ Hay simulaciones de laboratorio interactivas que podrían resultar útiles para 
 
 + [Cree y configure Azure Load Balancer](https://mslabs.cloudguides.com/guides/AZ-700%20Lab%20Simulation%20-%20Create%20and%20configure%20an%20Azure%20load%20balancer). Cree una red virtual, servidores back-end, un equilibrador de carga y, después, pruebe este último.
 + [Implemente una instancia de Azure Application Gateway](https://mslabs.cloudguides.com/guides/AZ-700%20Lab%20Simulation%20-%20Deploy%20Azure%20Application%20Gateway). Cree una puerta de enlace de aplicación, cree máquinas virtuales, cree el grupo de back-end y pruebe la puerta de enlace.
-+ [Implemente la administración del tráfico](https://mslabs.cloudguides.com/guides/AZ-104%20Exam%20Guide%20-%20Microsoft%20Azure%20Administrator%20Exercise%2010). Implemente una red en estrella tipo hub-and-spoke completa, incluidas las máquinas virtuales, las redes virtuales, el emparejamiento, el equilibrador de carga y la puerta de enlace de aplicaciones.
 
 ## Aptitudes de trabajo
 
 + Tarea 1: Use una plantilla para aprovisionar una infraestructura.
 + Tarea 2: Configurar una instancia de Azure Load Balancer.
 + Tarea 3: Configurar una instancia de Azure Application Gateway.
++ Tarea 4: Implementar las instancias en un esquema Hub And Spoke
 
 ## Tarea 1: Usar una plantilla para aprovisionar una infraestructura
 
@@ -315,6 +315,37 @@ En esta tarea, se implementa Azure Application Gateway delante de dos máquinas 
 1. Compruebe que se le dirige al servidor de vídeos (vm2).
 
 > **Nota**: Es posible que tenga que actualizar más de una vez o abrir una nueva ventana del explorador en modo InPrivate.
+
+## Tarea 4: Implementar las instancias en un esquema Hub And Spoke
+
+En esta tarea se realizará el aprovisionamiento de redes, Application gateway y máquinas virtuales para generar un esquema de red Hub and Spoke.
+
+1. Descargue los archivos de laboratorio **\\Allfiles\\Lab06** (plantilla y parámetros).
+
+1. Ejecute los mismos pasos de importación de plantillas usado en la [Tarea 1](#tarea1-usar-una-plantilla-para-aprovisionar-una-infraestructura)
+
+1. Busque el archivo **\\Allfiles\\Lab06\\az104-06-vms-loop-template.json**, selecciónelo y, después, seleccione **Abrir**.
+
+1. Seleccione **Editar parámetros** y cargue el archivo **\\Allfiles\\Lab06\\az104-06-vms-loop-parameters.json**.
+
+
+1. Use la siguiente información para completar los campos de la página de implementación personalizada y deje los demás campos con su valor predeterminado.
+
+    | Configuración       | Valor         |
+    | ---           | ---           |
+    | Subscription  | su suscripción de Azure |
+    | Resource group | `az104-rg6` (si fuera necesario, seleccione **Crear nuevo**) |
+    | Contraseña      | Proporcione una contraseña segura |
+
+    >**Nota**: Si recibe un error que indica que el tamaño de la máquina virtual no está disponible, seleccione una SKU que esté disponible en la suscripción y que tenga un mínimo de dos núcleos.
+
+1. Seleccione **Revisar y crear** y, luego, **Crear**.
+
+    >**Nota**: Espere a que se complete la implementación para pasar a la siguiente tarea. La implementación debería durar unos 5 minutos.
+
+    >**Nota**: Examine los recursos que se implementan. Habrá una red virtual con tres subredes y cada una de ellas tendrá una máquina virtual.
+
+1. Luego de realizar la ejecución de los Scripts, siga los pasos de la guía interactiva [Implemente la administración del tráfico](https://mslabs.cloudguides.com/guides/AZ-104%20Exam%20Guide%20-%20Microsoft%20Azure%20Administrator%20Exercise%2010). Implemente una red en estrella tipo hub-and-spoke completa, incluidas las máquinas virtuales, las redes virtuales, el emparejamiento, el equilibrador de carga y la puerta de enlace de aplicaciones.
 
 ## Limpieza de los recursos
 
