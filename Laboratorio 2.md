@@ -7,6 +7,7 @@
   - [Herramientas a usar](#herramientas-a-usar)
   - [Procedimiento](#procedimiento)
     - [Integración de aplicaciones](#integración-de-aplicaciones)
+      - [Preparación del ambiente](#preparación-del-ambiente)
       - [Integración vía SAML](#integración-vía-saml)
     - [Implementación de redes virtuales](#implementación-de-redes-virtuales)
 
@@ -40,6 +41,22 @@ Realizar el siguiente conjunto de actividades para el desarrollo del laboratorio
 ### Integración de aplicaciones
 
 En este laboratorio se espera poder realizar la integración de una aplicación __dummy__ para ser autenticada con el directorio de su Tenant de Azure
+
+#### Preparación del ambiente
+
+Ejecute los siguientes pasos en su equipo o en alguna máquina virtual para el despliegue de las aplicaciones.
+
+1. Vaya a al sitio web de [ngrok](https://ngrok.com/)
+2. Realice la creación de una cuenta en el [sitio web](https://dashboard.ngrok.com/signup)
+3. Descargue el ejecutable de la aplicación. Descomprima el archivo en una carpeta de fácil acceso por terminal (ej. c:\temp).
+4. Abra una línea de comando y ejecute los siguientes comandos:
+
+```powershell
+cd c:\temp
+.\ngrok.exe config add-authtoken "token_entregado_en_sitio_web"
+```
+
+5. 
 
 #### Integración vía SAML
 
