@@ -46,9 +46,11 @@ En este laboratorio se espera poder realizar la integración de una aplicación 
    1. Verifique que tenga acceso al sitio web de la aplicación [Test Service Provider](https://sptest.iamshowcase.com/)
    2. En la página web diríjase a la sección de [instrucciones](https://sptest.iamshowcase.com/instructions)
    3. Descargue el archivo que se le indica en el botón de [Download Metadata](https://sptest.iamshowcase.com/testsp_metadata.xml); guarde ese archivo ya que se usará mas adelante
-   4. Ejecute los pasos indicados en esta [guía](https://docs.digicert.com/en/trust-lifecycle-manager/how-to-guides/configure-a-profile-to-authenticate-requests-via-saml-2-0-using-microsoft-azure-ad-saml-idp/create-saml-idp-applications-in-azure-ad-portal.html).
+   4. Ejecute los pasos indicados en alguna de las siguientes guías:
+      1. [Guía de referencia 1](https://boxyhq.com/docs/jackson/sso-providers/azure) de los pasos a seguir en la configuración de una aplicación empresarial vía __SAML__
+      2. [Guía de referencia 2](https://docs.digicert.com/en/trust-lifecycle-manager/how-to-guides/configure-a-profile-to-authenticate-requests-via-saml-2-0-using-microsoft-azure-ad-saml-idp/create-saml-idp-applications-in-azure-ad-portal.html).
 
-   > __Nota__: Recuerde hacer uso del archivo de metadatos que descargo en los pasos anteriores. En la guía no ejecutar los pasos descritos del 15 al 19.
+   > __Nota__: Recuerde hacer uso del archivo de metadatos que descargo en los pasos anteriores. En la __guía de referencia 2__ no ejecutar los pasos descritos del 15 al 19.
 
    5. Una vez cargue el archivo de metadatos, en la ventana que se indica a continuación, busque la sección de __Relay State (Optional)__ y coloque el siguiente valor: __https://sptest.iamshowcase.com/protected?color=pink__. Recuerde luego de ingresar el parámetro de guardar la configuración.
     ![SAMLConfig1](./Images/SAMLConfig1.png)
