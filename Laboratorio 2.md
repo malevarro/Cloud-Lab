@@ -105,7 +105,7 @@ cp .\.env.sample.entra-id .\.env
 
 ```properties
 AUTHORITY=https://login.microsoftonline.com/"Valor_De_TenantID"
-CLIENT_ID="el_codigo_que_sale_en_EntraID"
+CLIENT_ID="el_código_que_sale_en_EntraID"
 CLIENT_SECRET="El_valor_del_secreto_creado"
 REDIRECT_URI=http://localhost:5000/getAToken
 SCOPE=User.Read
@@ -119,7 +119,7 @@ python manage.py runserver localhost:5000
 ```
 
 5. En el navegador de Internet de su preferencia, abra el sitio [http://localhost:5000](http://localhost:5000)
-6. Si todo esta correcto le pedira la autenticación de su usuario y verá la siguiente página web
+6. Si todo esta correcto le pedirá la autenticación de su usuario y verá la siguiente página web
 
 ![django1](./Images/django1.png)
 
@@ -142,7 +142,7 @@ cd c:\apps
 
 ```properties
 AUTHORITY=https://login.microsoftonline.com/"Valor_De_TenantID"
-CLIENT_ID="el_codigo_que_sale_en_EntraID"
+CLIENT_ID="el_código_que_sale_en_EntraID"
 CLIENT_SECRET="El_valor_del_secreto_creado"
 REDIRECT_URI=https://"REEMPLAZAR_POR_SU_URL".ngrok-free.app/getAToken
 SCOPE=User.Read
@@ -153,7 +153,7 @@ ENDPOINT=https://graph.microsoft.com/v1.0/me
 
 ![ngrok4](./Images/ngrok4.png)
 
-12. En la terminal de linea de comando en donde esta ejecutandose el __Python__ se debe para el proceso con _CTRL+C_ y se debe relanzar la tarea con el siguiente comando
+12. En la terminal de linea de comando en donde esta ejecutándose el __Python__ se debe para el proceso con _CTRL+C_ y se debe relanzar la tarea con el siguiente comando
 
 ```powershell
 cd c:\apps
