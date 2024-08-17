@@ -90,9 +90,25 @@ npm install
 
 ![regapps4](./Images/regapps4.png)
 
-Verifique el procedimiento de la siguiente manera
+Verifique el procedimiento de asignación con el siguiente [video](https://www.youtube.com/watch?v=9n70ZDVlL3c)
 
-![regappsvid0](./Images/regapps5.mp4)
+7. En la ruta de descarga e instalación de la herramienta se debe crear un nuevo archivo llamado __config.js__. como contenido de ese archivo se deben colocar las siguientes líneas
 
-7. 
-8. En la ruta de descarga e instalación de la herramienta se debe crear un nuevo archivo llamado config.js
+```javascript
+module.exports = {
+    credentials: {
+        azure: {
+            application_id: process.env.AZURE_APPLICATION_ID || '_Identificador_de_la_aplicacion',
+            key_value: process.env.AZURE_KEY_VALUE || '_secreto_creado_',
+            directory_id: process.env.AZURE_DIRECTORY_ID || '_Identificador_del_Tenant_',
+            // subscription_id: process.env.AZURE_SUBSCRIPTION_ID || '',
+        }
+    }
+};
+```
+
+8. Ejecute el siguiente comando para correr la aplicación contra su configuración
+
+```powershell
+./index.js --console=text
+```
