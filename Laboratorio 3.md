@@ -68,7 +68,7 @@ npm install
 ./index.js -h
 ```
 
-2. En la consola de Azure, ejecute los pasos 1 y 2 que se indican en la siguiente [guía](https://learn.microsoft.com/es-mx/entra/identity-platform/quickstart-web-app-python-flask?tabs=windows). En este caso no es necesario colocar ninguna URL al momento de crear la aplicación en EntraID, el valor puede ser vacío.
+1. En la consola de Azure, ejecute los que se indican en la siguiente [guía](https://github.com/aquasecurity/cloudsploit/blob/master/docs/azure.md). 
 
 ![regapps0](./Images/regapps0.png)
 
