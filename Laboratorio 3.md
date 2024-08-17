@@ -65,7 +65,7 @@ cd c:\apps
 git git clone https://github.com/aquasecurity/cloudsploit.git
 cd c:\apps\cloudsploit
 npm install
-./index.js -h
+node index.js
 ```
 
 1. En la consola de Azure, ejecute los que se indican en la siguiente [guía](https://github.com/aquasecurity/cloudsploit/blob/master/docs/azure.md). 
@@ -110,5 +110,5 @@ module.exports = {
 8. Ejecute el siguiente comando para correr la aplicación contra su configuración
 
 ```powershell
-./index.js --console=text
+node index.js --console=text
 ```
