@@ -84,7 +84,7 @@ En la salida del comando verifique el valor de la variable _Location_. Este es e
 
 4. Desde la linea de comando adicionar las siguientes variables de sistema para poder ejecutar la herramienta
 
-_Si es una terminal cmd normal_
+  _Si es una terminal cmd normal_
 
 ```bat
 set AZURE_CLIENT_ID="__valor de appid en EntraID__"
@@ -92,7 +92,7 @@ set AZURE_TENANT_ID="__Identificado Único en EntraID__"
 set AZURE_CLIENT_SECRET="__Secreto Generado en pasos anteriores__"
 ```
 
-_Si es en una terminal Powershell_
+  _Si es en una terminal Powershell_
 
 ```powershell
 $env:AZURE_CLIENT_ID="__valor de appid en EntraID__"
@@ -213,11 +213,12 @@ cp config_example.js config.js
 ```powershell
 node index.js --config="c:\apps\cloudsploit\config.js" --cloud=azure --json=file.json --junit=file.xml --csv=file.csv --console=table --ignore-ok
 ```
+
 11. Espere a que termine de realizar el escaneo y observe los resultados
 
 ![Cloudsploit1](./Images/Cloudsploit1.png)
 
-12. En la ruta de la aplicación _Ej.: c:\apps\cloudsploit\_ se crean un archivo csv que puede ser usado para abrir en excel los resultados
+12. En la ruta de la aplicación _Ej.: c:\apps\cloudsploit_ se crean un archivo csv que puede ser usado para abrir en excel los resultados
 
 ![Cloudsploit2](./Images/Cloudsploit2.png)
 
