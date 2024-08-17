@@ -1,14 +1,15 @@
-# Laboratorio 2 - Configuración Inicial de los Servicios
+# Laboratorio 3 - Configuración Inicial de Seguridad
 
 ![cloudlogo](Images/cloud_computing.jpg)
 
-- [Laboratorio 2 - Configuración Inicial de los Servicios](#laboratorio-2---configuración-inicial-de-los-servicios)
+- [Laboratorio 3 - Configuración Inicial de Seguridad](#laboratorio-3---configuración-inicial-de-seguridad)
   - [Objetivo](#objetivo)
   - [Herramientas a usar](#herramientas-a-usar)
     - [Herramientas Adicionales](#herramientas-adicionales)
   - [Procedimiento](#procedimiento)
     - [Laboratorios de seguridad](#laboratorios-de-seguridad)
     - [Integración de Herramientas de Postura de Seguridad -  Cloud Security Posture Management (CSPM)](#integración-de-herramientas-de-postura-de-seguridad----cloud-security-posture-management-cspm)
+      - [Cloudsploit](#cloudsploit)
 
 ## Objetivo
 
@@ -22,7 +23,7 @@ A continuación se listan las herramientas a utilizar para el laboratorio:
 | --- | --- | --- |
 | Azure | <https://portal.azure.com/> | ![AzureLogo](Images/Microsoft-Azure-Symbol.png)|
 | node.js| <https://nodejs.org/en> | ![nodejslogo](./Images/nodejslogo.jpg) |
-| CloudSploit | <https://github.com/aquasecurity/cloudsploit>
+| CloudSploit | <https://github.com/aquasecurity/cloudsploit> | ![cloudsploitlogo](./Images/Cloudsploit.png)
 
 ### Herramientas Adicionales
 
@@ -50,3 +51,48 @@ Siga los pasos que se indican en cada una de las siguientes guías
 
 ### Integración de Herramientas de Postura de Seguridad -  Cloud Security Posture Management (CSPM)
 
+#### Cloudsploit
+
+Para la ejecución de este laboratorio es necesario realizar la instalación de la herramienta siguiendo los siguientes pasos:
+
+> __Nota:__ Para esta instalación es necesario contar con Node.JS instalado en el equipo.
+
+1. Desde una terminal de comandos en el equipo ejecute los siguientes comandos
+
+```powershell
+mkdir c:\apps
+cd c:\apps
+git git clone https://github.com/aquasecurity/cloudsploit.git
+cd c:\apps\cloudsploit
+npm install
+./index.js -h
+```
+
+2. En la consola de Azure, ejecute los pasos 1 y 2 que se indican en la siguiente [guía](https://learn.microsoft.com/es-mx/entra/identity-platform/quickstart-web-app-python-flask?tabs=windows). En este caso no es necesario colocar ninguna URL al momento de crear la aplicación en EntraID, el valor puede ser vacío.
+
+![regapps0](./Images/regapps0.png)
+
+>__Nota:__ Recuerde realizar la creación del secreto y copiarlo en un archivo de texto.
+
+3. En el portal de Azure vaya a las suscripciones activas que posee. para hacer esto en la barra superior del centro coloque la palabra suscripciones, luego seleccione la llave que aparece.
+
+![regapps1](./Images/regapps1.png)
+
+4. Sobre el listado que aparece, haga click la suscripción e ingrese sobre las propiedades. Vaya a la sección de control de acceso (IAM) y allí haga clic en el botón de agregar-> agregar asignación de rol
+
+![regapps2](./Images/regapps2.png)
+
+5. Una vez allí seleccione el rol de __Reader__ o __Lector Global__
+
+![regapps3](./Images/regapps3.png)
+
+6. En la siguiente pantalla va a hacer click en _Seleccionar Miembros_ en la ventana inicia a buscar el nombre de la aplicación que creo anteriormente, luego seleccione la identidad de la aplicación y haga clic en _Seleccionar_
+
+![regapps4](./Images/regapps4.png)
+
+Verifique el procedimiento de la siguiente manera
+
+![regappsvid0](./Images/regapps5.mp4)
+
+7. 
+8. En la ruta de descarga e instalación de la herramienta se debe crear un nuevo archivo llamado config.js

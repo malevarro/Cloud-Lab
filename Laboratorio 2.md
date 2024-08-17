@@ -26,8 +26,8 @@ A continuación se listan las herramientas a utilizar para el laboratorio:
 | Azure | <https://portal.azure.com/> | ![AzureLogo](Images/Microsoft-Azure-Symbol.png)|
 | Visual Studio Code | <https://code.visualstudio.com/download> | ![VSCodeLogo](Images/vscode.png) |
 | GIT for Windows | <https://gitforwindows.org/> | ![GITLogo](Images/git_logo.png)|
-| Python for Windows | <https://www.python.org/> | ![NodeJSLogo](Images/python-logo.png)|
-| ngrok | <https://ngrok.com/> | ![NodeJSLogo](Images/ngrok-blue-med.png)|
+| Python for Windows | <https://www.python.org/> | ![PythonLogo](Images/python-logo.png)|
+| ngrok | <https://ngrok.com/> | ![NGROKLogo](Images/ngrok-blue-med.png)|
 
 ### Herramientas Adicionales
 
