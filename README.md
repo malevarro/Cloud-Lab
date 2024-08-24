@@ -7,6 +7,7 @@ En el siguiente conjunto de enlaces se relacionan las diferentes actividades a r
 1. [Laboratorio 1 - Primeros Pasos](Laboratorio%201.md)
 2. [Laboratorio 2 - Configuración Inicial de los Servicios](Laboratorio%202.md)
 3. [Laboratorio 3 - Configuración Inicial de Seguridad](Laboratorio%203.md)
+4. [Laboratorio 4 - Implementación de DevSecOps](Laboratorio%204.md)
 
 ---
 Material de libre acceso y consulta.
