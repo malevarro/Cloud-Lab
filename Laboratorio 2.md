@@ -23,11 +23,11 @@ A continuación se listan las herramientas a utilizar para el laboratorio:
 
 | Nombre | Sitio Web | Logo |
 | --- | --- | --- |
-| Azure | <https://portal.azure.com/> | ![AzureLogo](Images/Microsoft-Azure-Symbol.png)|
-| Visual Studio Code | <https://code.visualstudio.com/download> | ![VSCodeLogo](Images/vscode.png) |
-| GIT for Windows | <https://gitforwindows.org/> | ![GITLogo](Images/git_logo.png)|
-| Python for Windows | <https://www.python.org/> | ![PythonLogo](Images/python-logo.png)|
-| ngrok | <https://ngrok.com/> | ![NGROKLogo](Images/ngrok-blue-med.png)|
+| Azure | <https://portal.azure.com/> | <center><img src="./Images/Microsoft-Azure-Symbol.png" height="80" alt="AzureLogo"/></center> |
+| Visual Studio Code | <https://code.visualstudio.com/download> | <center><img src="./Images/vscode.png" height="80" alt="VSCodeLogo"/></center> |
+| GIT for Windows | <https://gitforwindows.org/> | <center><img src="./Images/git_logo.png" height="80" alt="GITLogo"/></center> |
+| Python for Windows | <https://www.python.org/> | <center><img src="./Images/python-logo.png" height="80" alt="PythonLogo"/></center> |
+| ngrok | <https://ngrok.com/> | <center><img src="./Images/ngrok-blue-med.png" height="80" alt="NGROKLogo"/></center> |
 
 ### Herramientas Adicionales
 
@@ -56,7 +56,7 @@ Ejecute los siguientes pasos en su equipo o en alguna máquina virtual para el d
 2. Realice la creación de una cuenta en el [sitio web](https://dashboard.ngrok.com/signup)
 3. En el sitio web seleccione la plataforma o sistema operativo que desea usar (ej. Windows)
 
-![ngrok1](./Images/ngrok1.png)
+<center><img src="./Images/ngrok1.png" height="500" alt="ngrok1"/></center>
 
 4. Descargue el ejecutable de la aplicación. Descomprima el archivo en una carpeta de fácil acceso por terminal (ej. c:\apps).
 5. Abra una línea de comando y ejecute los siguientes comandos:
@@ -77,14 +77,21 @@ cd c:\apps
 
    > __Nota__: Recuerde hacer uso del archivo de metadatos que descargo en los pasos anteriores. En la __guía de referencia 2__ no ejecutar los pasos descritos del 15 al 19.
 
-   5. Una vez cargue el archivo de metadatos, en la ventana que se indica a continuación, busque la sección de __Relay State (Optional)__ y coloque el siguiente valor: __https://sptest.iamshowcase.com/protected?color=pink__. Recuerde luego de ingresar el parámetro de guardar la configuración.
-    ![SAMLConfig1](./Images/SAMLConfig1.png)
+   5. Una vez cargue el archivo de metadatos, en la ventana que se indica a continuación, busque la sección de __Relay State (Optional)__ y coloque el siguiente valor: __<https://sptest.iamshowcase.com/protected?color=pink>__. Recuerde luego de ingresar el parámetro de guardar la configuración.
+
+<center><img src="./Images/SAMLConfig1.png" height="800" alt="SAMLConfig1"/></center>
+
    6. Guarde el archivo de metadatos que descargo del portal de Azure y realice la carga en la página de la aplicación de prueba [aquí](https://sptest.iamshowcase.com/instructions#spinit)
-    ![SAMLConfig2](./Images/SAMLConfig2.png)
+
+<center><img src="./Images/SAMLConfig2.png" height="500" alt="SAMLConfig2"/></center>
+
    7. Luego de cargar todo, haga click en la opción que dice __Protected Page__. Aquí la aplicación va a solicitar que se autentique con algún usuario que esté creado en su directorio.
-    ![SAMLConfig3](./Images/SAMLConfig3.png)
+
+<center><img src="./Images/SAMLConfig3.png" height="100" alt="SAMLConfig3"/></center>
+
    8. Si todo esta correcto, usted será redirigido a una página que contiene toda la información del usuario
-    ![SAMLConfig4](./Images/SAMLConfig4.png)
+
+<center><img src="./Images/SAMLConfig4.png" height="500" alt="SAMLConfig4"/></center>
 
 #### Integración vía OIDC (OAuth)
 
@@ -121,7 +128,7 @@ python manage.py runserver localhost:5000
 5. En el navegador de Internet de su preferencia, abra el sitio [http://localhost:5000](http://localhost:5000)
 6. Si todo esta correcto le pedirá la autenticación de su usuario y verá la siguiente página web
 
-![django1](./Images/django1.png)
+<center><img src="./Images/django1.png" height="500" alt="django1"/></center>
 
 7. Ahora vamos a publicar la aplicación por medio de un proxy reverso. Para esto se debe ejecutar el servicio de __ngrok__ en la ruta donde se descargó en los pasos anteriores. Desde la linea de comandos ejecutar lo siguiente:
 
@@ -132,11 +139,11 @@ cd c:\apps
 
 8. Con el servicio en ejecución se debe verificar cuál es la URL que ha sido entregada para la aplicación
 
-![ngrok2](./Images/ngrok2.png)
+<center><img src="./Images/ngrok2.png" height="300" alt="ngrok2"/></center>
 
 9. Adicione la URL encontrada en el registro de la aplicación hecho en EntraID
 
-![ngrok3](./Images/ngrok3.png)
+<center><img src="./Images/ngrok3.png" height="600" alt="ngrok3"/></center>
 
 10. Con la ayuda de Visual Studio Code o Notepad++ abra el archivo __.env__ y modifique el valor de la propiedad "REDIRECT_URI". Debe quedar el archivo de la siguiente manera:
 
@@ -151,7 +158,7 @@ ENDPOINT=https://graph.microsoft.com/v1.0/me
 
 11. Modifique el archivo de configuración del servidor web de Python para incluir la URL generada en __ngrok__; para esto debe ir a modificar el archivo _settings.py_. Este archivo esta en la ruta en donde descargo la aplicación con la ayuda de __Git__, para el caso de ejemplo de este laboratorio la ruta sería _c:\apps\ms-identity-python-webapp-django\mysite\settings.py_. En el archivo es necesario modificar los valores de la variable __ALLOWED_HOSTS__ con la URL que usted obtuvo de __ngrok__. un ejemplo es el siguiente:
 
-![ngrok4](./Images/ngrok4.png)
+<center><img src="./Images/ngrok4.png" height="200" alt="ngrok4"/></center>
 
 12. En la terminal de linea de comando en donde esta ejecutándose el __Python__ se debe para el proceso con _CTRL+C_ y se debe relanzar la tarea con el siguiente comando
 
@@ -162,7 +169,7 @@ cd c:\apps
 
 13. Una vez realizada esta configuración podrá ingresar a la aplicación desde cualquier navegador por medio de la URL de la herramienta de __ngrok__
 
-![ngrok5](./Images/ngrok5.png)
+<center><img src="./Images/ngrok5.png" height="500" alt="ngrok5"/></center>
 
 ### Implementación de redes virtuales
 

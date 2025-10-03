@@ -27,8 +27,8 @@ Los proveedores de servicios de computación en la nube que pueden ser incluidos
 
 | Nombre | Sitio Web | Logo |
 | --- | --- | --- |
-| Azure | <https://portal.azure.com/> | ![AzureLogo](Images/Microsoft-Azure-Symbol.png)|
-| Amazon Web Services (AWS) | <https://portal.aws.amazon.com/> | ![AWSLogo](Images/AWS-Emblem.png) |
+| Azure | <https://portal.azure.com/> | <center><img src="./Images/Microsoft-Azure-Symbol.png" height="80" alt="AzureLogo"/></center> |
+| Amazon Web Services (AWS) | <https://portal.aws.amazon.com/> | <center><img src="./Images/AWS-Emblem.png" height="80" alt="AWSLogo"/></center> |
 
 ## Procedimiento
 

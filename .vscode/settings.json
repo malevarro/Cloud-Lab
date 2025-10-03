@@ -6,5 +6,9 @@
         "multifactor",
         "mysite",
         "VNET's"
-    ]
+    ],
+    "markdownlint.config": {
+        "MD029" : false,
+        "MD033" : false
+    }
 }
