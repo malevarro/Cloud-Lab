@@ -168,8 +168,8 @@ cd c:\apps
 
 En este laboratorio de realizará la implementación de las definiciones de redes virtuales (VNET's o VCN's), se realizarán interconexiones entre ellas y finalmente se hará prueba de una topología de Hub and Spoke. Ejecute los pasos indicados en las siguientes guías:
 
-   1. [Implementación de redes virtuales en Azure](./AZ-104-Labs/Instructions/Labs/LAB_04-Implement_Virtual_Networking.md)
-   2. [Interconexión entre redes virtuales en Azure](./AZ-104-Labs/Instructions/Labs/LAB_05-Implement_Intersite_Connectivity.md)
-   3. [Configuración avanzada del tráfico de red en Azure](./AZ-104-Labs/Instructions/Labs/LAB_06-Implement_Network_Traffic_Management.md)
+   1. [Implementación de redes virtuales en Azure](https://microsoftlearning.github.io/AZ-104-MicrosoftAzureAdministrator/Instructions/Labs/LAB_04-Implement_Virtual_Networking.html)
+   2. [Interconexión entre redes virtuales en Azure](https://microsoftlearning.github.io/AZ-104-MicrosoftAzureAdministrator/Instructions/Labs/LAB_05-Implement_Intersite_Connectivity.html)
+   3. [Configuración avanzada del tráfico de red en Azure](https://microsoftlearning.github.io/AZ-104-MicrosoftAzureAdministrator/Instructions/Labs/LAB_06-Implement_Network_Traffic_Management.html)
 
 > __Nota:__ Recuerde realizar y documentar todos los ejercicios de una manera clara y adecuada.
