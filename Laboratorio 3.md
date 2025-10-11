@@ -46,12 +46,13 @@ Realizar el siguiente conjunto de actividades para el desarrollo del laboratorio
 
 Siga los pasos que se indican en cada una de las siguientes guías
 
-1. [Laboratorio 3.1](./Labs/Laboratorio%203-1.pdf)
-2. [Laboratorio 3.2](./Labs/Laboratorio%203-2.pdf)
-3. [Laboratorio 3.3](./Labs/Laboratorio%203-3.pdf)
-4. [Laboratorio 3.4](./Labs/Laboratorio%203-4.pdf)
-5. [Laboratorio 3.5](./Labs/Laboratorio%203-5.pdf)
-6. [Laboratorio 3.6](./Labs/Laboratorio%203-6.pdf)
+1. [Configurando el almacenamiento de Azure](https://learn.microsoft.com/es-es/azure/storage/common/storage-account-create?tabs=azure-portal)
+2. [Laboratorio 3.1](./Labs/Laboratorio%203-1.pdf)
+3. [Laboratorio 3.2](./Labs/Laboratorio%203-2.pdf)
+4. [Laboratorio 3.3](./Labs/Laboratorio%203-3.pdf)
+5. [Laboratorio 3.4](./Labs/Laboratorio%203-4.pdf)
+6. [Laboratorio 3.5](./Labs/Laboratorio%203-5.pdf)
+7. [Laboratorio 3.6](./Labs/Laboratorio%203-6.pdf)
 
 ### Integración de Herramientas de Postura de Seguridad -  Cloud Security Posture Management (CSPM)
 
