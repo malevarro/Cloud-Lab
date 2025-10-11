@@ -23,11 +23,11 @@ A continuación se listan las herramientas a utilizar para el laboratorio:
 
 | Nombre | Sitio Web | Logo |
 | --- | --- | --- |
-| Azure | <https://portal.azure.com/> | ![AzureLogo](Images/Microsoft-Azure-Symbol.png)|
-| Python for Windows | <https://www.python.org/> | ![PythonLogo](Images/python-logo.png)|
-| Prowler | <https://github.com/prowler-cloud/prowler> | ![prowlerlogo](./Images/prowler-logo-white.png) |
-| node.js| <https://nodejs.org/en> | ![nodejslogo](./Images/nodejslogo.jpg) |
-| CloudSploit | <https://github.com/aquasecurity/cloudsploit> | ![cloudsploitlogo](./Images/Cloudsploit.png) |
+| Azure | <https://portal.azure.com/> | <center><img src="./Images/Microsoft-Azure-Symbol.png" height="80" alt="AzureLogo"></center> |
+| Python for Windows | <https://www.python.org/> | <center><img src="./Images/python-logo.png" height="80" alt="PythonLogo"></center>|
+| Prowler | <https://github.com/prowler-cloud/prowler> | <center><img alt="Prowlerlogo" src="./Images/prowler-logo-white.png" height="80"></center> |
+| node.js| <https://nodejs.org/en> | <center><img alt="Nodejslogo" src="./Images/nodejslogo.jpg" height="80"></center> |
+| CloudSploit | <https://github.com/aquasecurity/cloudsploit> | <center><img alt="Cloudsploitlogo" src="./Images/Cloudsploit.png" height="80"></center> |
 
 ### Herramientas Adicionales
 
@@ -74,7 +74,7 @@ pip show prowler
 
 En la salida del comando verifique el valor de la variable _Location_. Este es el valor que debe adicionar al path del sistema siguiendo la siguiente [guía](https://www.neoguias.com/agregar-directorio-path-windows/).
 
-![Prowler1](./Images/prowler1.png)
+<center><img alt="Prowler1" src="./Images/prowler1.png" height=200></center>
 
 2. En la consola de Azure, ejecute los que se indican en la siguiente [guía](https://github.com/aquasecurity/cloudsploit/blob/master/docs/azure.md)
 
@@ -108,15 +108,15 @@ prowler azure --sp-env-auth
 
 6. Espere a que se ejecute el análisis del entorno
 
-![Prowler2](./Images/prowler2.png)
+<center><img alt=Prowler2 src="./Images/prowler2.png" height=250></center>
 
 7. Al finalizar el análisis le indicara el cuadro de incumplimiento y las rutas en donde puede encontrar los archivos de los resultados para verificar de una mejor manera.
 
-![Prowler3](./Images/prowler3.png)
+<center><img alt=Prowler3 src="./Images/prowler3.png" height=500></center>
 
 8. Abra el archivo HTML en un explorador y verifique los resultados
 
-![Prowler4](./Images/prowler4.png)
+<center><img alt=Prowler4 src="./Images/prowler4.png" height=500></center>
 
 9. En una terminal de comandos ejecute el siguiente comando
 
@@ -126,11 +126,11 @@ prowler dashboard
 
 10. En la salida del comando verifique la dirección que le indica para que sea abierta desde un navegador de Internet
 
-![Prowler5](./Images/prowler5.png)
+<center><img alt=Prowler5 src="./Images/prowler5.png" height=500></center>
 
 11. En el navegador abra el sitio web y verifique la información que le presentan
 
-![Prowler6](./Images/prowler6.png)
+<center><img alt=Prowler6 src="./Images/prowler6.png" height=500></center>
 
 #### Cloudsploit
 
@@ -151,25 +151,25 @@ node index.js -h
 
 1. En la consola de Azure, ejecute los que se indican en la siguiente [guía](https://github.com/aquasecurity/cloudsploit/blob/master/docs/azure.md).
 
-![regapps0](./Images/regapps0.png)
+<center><img alt="regapps0" src="./Images/regapps0.png" height=500></center>
 
 >__Nota:__ Recuerde realizar la creación del secreto y copiarlo en un archivo de texto.
 
 3. En el portal de Azure vaya a las suscripciones activas que posee. para hacer esto en la barra superior del centro coloque la palabra suscripciones, luego seleccione la llave que aparece.
 
-![regapps1](./Images/regapps1.png)
+<center><img alt="regapps1" src="./Images/regapps1.png" height=200></center>
 
 4. Sobre el listado que aparece, haga click la suscripción e ingrese sobre las propiedades. Vaya a la sección de control de acceso (IAM) y allí haga clic en el botón de agregar-> agregar asignación de rol
 
-![regapps2](./Images/regapps2.png)
+<center><img alt="regapps2" src="./Images/regapps2.png" height=500></center>
 
 5. Una vez allí seleccione el rol de __Reader__ y de __Key Vault Administrator__. Sobre el EntraID se debe colocar el rol de __Global Reader__
 
-![regapps3](./Images/regapps3.png)
+<center><img alt="regapps3" src="./Images/regapps3.png" height=500></center>
 
 6. En la siguiente pantalla va a hacer click en _Seleccionar Miembros_ en la ventana inicia a buscar el nombre de la aplicación que creo anteriormente, luego seleccione la identidad de la aplicación y haga clic en _Seleccionar_
 
-![regapps4](./Images/regapps4.png)
+<center><img alt="regapps4" src="./Images/regapps4.png" height=500></center>
 
 7. En la ruta de descarga e instalación de la herramienta se debe crear un nuevo archivo llamado __config.js__. Para ello ejecute el siguiente comando:
 
@@ -216,15 +216,15 @@ node index.js --config="c:\apps\cloudsploit\config.js" --cloud=azure --json=file
 
 11. Espere a que termine de realizar el escaneo y observe los resultados
 
-![Cloudsploit1](./Images/Cloudsploit1.png)
+<center><img alt="Cloudsploit1" src="./Images/Cloudsploit1.png" height=500></center>
 
 12. En la ruta de la aplicación _Ej.: c:\apps\cloudsploit_ se crean un archivo csv que puede ser usado para abrir en excel los resultados
 
-![Cloudsploit2](./Images/Cloudsploit2.png)
+<center><img alt="Cloudsploit2" src="./Images/Cloudsploit2.png" height=350></center>
 
 13. Verifique en Excel los resultado obtenidos abriendo el archivo.
 
-![Cloudsploit3](./Images/Cloudsploit3.png)
+<center><img alt="Cloudsploit3" src="./Images/Cloudsploit3.png" height=500></center>
 
 ## Fin del procedimiento
 
