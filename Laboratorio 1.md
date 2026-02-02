@@ -60,5 +60,7 @@ Realizar el siguiente conjunto de actividades para el desarrollo del laboratorio
 8. Gestión de recursos
    1. [Administración de recursos de Azure (Portal)](./AZ-104-Labs/Instructions/Labs/LAB_03a-Manage_Azure_Resources_by_Using_the_Azure_Portal.md)
    2. [Administración de recursos de Azure mediante Azure PowerShell](https://microsoftlearning.github.io/AZ-104-MicrosoftAzureAdministrator/Instructions/Labs/LAB_03b-Manage_Azure_Resources_by_Using_ARM_Templates.html)
-//9. Creación de Redes Virtuales
-   //1. [Implementación de redes virtuales](https://microsoftlearning.github.io/AZ-104-MicrosoftAzureAdministrator/Instructions/Labs/LAB_04-Implement_Virtual_Networking.html)
+<!-- 
+9. Creación de Redes Virtuales
+   1. [Implementación de redes virtuales](https://microsoftlearning.github.io/AZ-104-MicrosoftAzureAdministrator/Instructions/Labs/LAB_04-Implement_Virtual_Networking.html)
+-->
