@@ -231,7 +231,7 @@ az vm create \
   --name FW-Linux \
   --image Ubuntu2204 \
   --size Standard_B1ls \
-  --nics fw-nic-front fw-nic-back \
+  --nics fw-nic-back fw-nic-front \
   --admin-username azureuser \
   --authentication-type password \
   --admin-password <CONTRASEÑA_SEGURA>
