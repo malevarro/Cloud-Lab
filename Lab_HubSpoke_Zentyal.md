@@ -1,7 +1,7 @@
 # Guía de Laboratorio – Despliegue de Arquitectura Hub & Spoke en Azure con Zentyal Server (NVA)
 
 > **Curso:** Seguridad en Nubes Públicas  
-> **Institución:** Banco de la República – DSI  
+> **Institución:** Escuela de Comunicaciones Militares - ESCOM  
 > **Nivel:** Posgrado  
 > **Uso:** Interno  
 > **Versión SO:** Ubuntu 24.04 LTS (Noble Numbat)
