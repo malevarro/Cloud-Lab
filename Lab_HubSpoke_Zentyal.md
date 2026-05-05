@@ -1,7 +1,7 @@
 # Guía de Laboratorio – Despliegue de Arquitectura Hub & Spoke en Azure con Zentyal Server (NVA)
 
 > **Curso:** Seguridad en Nubes Públicas  
-> **Institución:** Escuela de Comunicaciones Militares - ESCOM  
+> **Institución:** Banco de la República – DSI  
 > **Nivel:** Posgrado  
 > **Uso:** Interno  
 > **Versión SO:** Ubuntu 24.04 LTS (Noble Numbat)
@@ -475,75 +475,112 @@ echo "FW Front IP (next-hop UDR): $FW_FRONT_IP"
 
 Conectarse a la VM `FW-Zentyal` mediante SSH (MobaXterm u otro cliente) con la IP pública obtenida y el usuario `azureuser`.
 
-#### 7.2.1 – OPCIONAL - Forzar nomenclatura de interfaces a estilo `eth` (requerido por Zentyal)
+#### 7.2.1 – Verificar nomenclatura de interfaces de red
 
-El script de instalación de Zentyal 8.1 verifica que las interfaces de red usen la nomenclatura clásica `eth0`, `eth1`, etc. Ubuntu 24.04 usa por defecto nombres predictivos (`enp3s0`, `ens4`, etc.), por lo que **es obligatorio** configurar el sistema para usar la nomenclatura tradicional antes de ejecutar el instalador.
-
-```bash
-# Configurar GRUB para deshabilitar la nomenclatura predictiva de interfaces
-sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=".*"/GRUB_CMDLINE_LINUX_DEFAULT="net.ifnames=0 biosdevname=0"/' /etc/default/grub
-
-# Aplicar la configuración de GRUB
-sudo update-grub
-
-# Reiniciar el sistema para que los cambios tomen efecto
-sudo reboot
-```
-
-Después del reinicio, volver a conectarse por SSH y verificar que las interfaces ahora usan la nomenclatura `eth`:
+El script de instalación de Zentyal 8.1 requiere que las interfaces de red usen la nomenclatura clásica con prefijo `eth` (`eth0`, `eth1`, etc.). Ejecutar el siguiente comando para verificar el estado actual:
 
 ```bash
 ip -br a
-# Salida esperada (ejemplo):
-# lo               UNKNOWN   127.0.0.1/8
-# eth0             UP        10.0.1.X/24    ← NIC Back (primaria en Azure)
-# eth1             UP        10.0.0.X/24    ← NIC Front
 ```
 
-> **Nota:** Si el comando anterior no muestra interfaces con prefijo `eth`, el instalador de Zentyal abortará con el mensaje `The network interface naming is not using 'eth'`. Revisar la configuración de GRUB y reiniciar nuevamente.
+**Interpretar la salida:**
 
-#### 7.2.2 – Actualizar el sistema completamente
+| Resultado | Acción requerida |
+|---|---|
+| Las interfaces muestran prefijo `eth` (ej: `eth0`, `eth1`) | ✅ Continuar directamente al paso 7.2.2 |
+| Las interfaces muestran nombres predictivos (ej: `enp3s0`, `ens4`, `ens5`) | ⚠️ Ejecutar los comandos del bloque siguiente |
 
-El script de instalación de Zentyal 8.1 verifica que el sistema esté completamente actualizado (`apt dist-upgrade`) antes de continuar. Si hay paquetes pendientes, el instalador aborta.
+**Ejemplo de salida con nomenclatura correcta (`eth`) — no requiere acción:**
+
+```
+lo               UNKNOWN   127.0.0.1/8
+eth0             UP        10.0.1.X/24
+eth1             UP        10.0.0.X/24
+```
+
+**Ejemplo de salida con nomenclatura predictiva — requiere corrección:**
+
+```
+lo               UNKNOWN   127.0.0.1/8
+enp3s0           UP        10.0.1.X/24
+ens5             UP        10.0.0.X/24
+```
+
+---
+
+> ⚠️ **Paso opcional – Solo ejecutar si las interfaces NO usan prefijo `eth`**
+>
+> Ubuntu 24.04 usa nombres predictivos de interfaz por defecto. Si el resultado anterior mostró nombres como `enp3s0` o `ens4`, ejecutar los siguientes comandos para forzar la nomenclatura clásica mediante GRUB, y luego reiniciar:
 
 ```bash
+# Configurar GRUB para deshabilitar nombres predictivos de interfaces
+sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=".*"/GRUB_CMDLINE_LINUX_DEFAULT="net.ifnames=0 biosdevname=0"/' /etc/default/grub
+
+# Regenerar la configuración de GRUB
+sudo update-grub
+
+# Reiniciar para aplicar los cambios
+sudo reboot
+```
+
+> Después del reinicio, volver a conectarse por SSH y **repetir el comando `ip -br a`** para confirmar que las interfaces ahora aparecen con prefijo `eth` antes de continuar.
+
+---
+
+#### 7.2.2 – Actualizar todos los paquetes del sistema
+
+El script de instalación verifica que el sistema esté completamente actualizado y **aborta si detecta paquetes pendientes**. Ejecutar los siguientes comandos en orden:
+
+```bash
+# Actualizar la lista de repositorios
 sudo apt update
+
+# Actualizar todos los paquetes instalados (incluyendo el kernel si aplica)
 sudo apt dist-upgrade -y
 ```
 
-#### 7.2.3 – Habilitar IP forwarding en el kernel
-
-El reenvío IP debe habilitarse para que el sistema actúe como router/NVA. El benchmark CIS indica este parámetro como crítico en dispositivos que operan como router, y advierte que el hardening estándar lo deshabilita por defecto.
+Si durante el `dist-upgrade` se reportan paquetes con dependencias rotas o que no pudieron instalarse, instalarlos manualmente antes de continuar. Por ejemplo:
 
 ```bash
-sudo tee /etc/sysctl.d/99-nva-forwarding.conf >/dev/null <<'EOF'
-net.ipv4.ip_forward=1
-# Evitar problemas con rutas asimétricas típicas en NVA
-net.ipv4.conf.all.rp_filter=0
-net.ipv4.conf.default.rp_filter=0
-EOF
+# Ejemplo: instalar paquetes que quedaron pendientes
+sudo apt install -y open-vm-tools
 
-sudo sysctl --system
-
-# Verificar que el forwarding esté activo
-sysctl net.ipv4.ip_forward
-# Salida esperada: net.ipv4.ip_forward = 1
+# Reparar paquetes en estado inconsistente si es necesario
+sudo dpkg --configure -a
+sudo apt install -f
 ```
+
+> **Verificar que no queden paquetes pendientes** antes de continuar:
+>
+> ```bash
+> apt list --upgradable 2>/dev/null
+> # La salida debe mostrar solo la línea "Listing..." sin paquetes adicionales
+> ```
 
 ### 7.3 – Instalar Zentyal Server 8.1 Development Edition
 
-Zentyal 8.1 soporta oficialmente **Ubuntu 24.04 LTS (Noble Numbat)**. La instalación se realiza mediante el script oficial alojado en GitHub.
+Zentyal 8.1 soporta oficialmente **Ubuntu 24.04 LTS (Noble Numbat)**. La instalación se realiza mediante el script personalizado del repositorio del curso, el cual incorpora el **user agent** necesario en los comandos `wget` para evitar bloqueos al descargar las claves GPG y paquetes desde los servidores de Zentyal.
+
+> **¿Por qué este script y no el oficial?**
+> El script oficial de Zentyal usa `wget` sin user agent, lo que puede causar errores `403 Forbidden` al descargar la clave GPG del repositorio (`keys.zentyal.org`) en entornos de nube como Azure. El script del repositorio del curso incluye la opción `-U "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0"` en todos los comandos `wget` para resolver este problema.
 
 #### 7.3.1 – Descargar el script de instalación
 
 ```bash
-# Descargar el script oficial de Zentyal 8.1 para Ubuntu
-wget https://github.com/malevarro/Cloud-Lab/blob/main/Firewall/zentyal_installer_8.1.sh
+# Descargar el script personalizado desde el repositorio del curso
+wget -U "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0" \
+  -O zentyal_installer_8.1.sh \
+  https://raw.githubusercontent.com/malevarro/Cloud-Lab/main/Firewall/zentyal_installer_8.1.sh
 ```
 
 #### 7.3.2 – Revisar el script antes de ejecutarlo
 
-El script realiza las siguientes verificaciones previas a la instalación y aborta si alguna falla:
+```bash
+# Buena práctica: revisar el contenido del script antes de ejecutarlo como root
+less zentyal_installer_8.1.sh
+```
+
+El script realiza las siguientes verificaciones previas a la instalación y **aborta si alguna falla**:
 
 | Verificación | Descripción |
 |---|---|
@@ -571,12 +608,12 @@ El instalador solicitará una única confirmación interactiva al inicio:
 Do you want to install the Zentyal Graphical environment? (n|y)
 ```
 
-Para este laboratorio responder **`n`** (sin entorno gráfico), ya que el acceso se realiza únicamente mediante la interfaz web y SSH. Responder `y` solo si se requiere escritorio local en la VM.
+Para este laboratorio responder **`n`** (sin entorno gráfico), ya que el acceso se realiza únicamente mediante la interfaz web y SSH.
 
 El proceso realiza automáticamente:
 
-1. Añade el repositorio oficial de Zentyal (`packages.zentyal.org`) con su clave GPG.
-2. Añade el repositorio de Firefox (requerido por el módulo `zenbuntu-desktop` si se eligió entorno gráfico).
+1. Añade el repositorio oficial de Zentyal (`packages.zentyal.org`) descargando su clave GPG con user agent.
+2. Añade el repositorio de Firefox (requerido por `zenbuntu-desktop` si se eligió entorno gráfico).
 3. Añade el repositorio de Docker (requerido por módulos que dependen de contenedores).
 4. Instala los paquetes base: `zentyal` y `zenbuntu-core`.
 5. Deshabilita `cloud-init` al finalizar.
@@ -1096,7 +1133,8 @@ az network nic list-effective-nsg \
 - [Azure Network Watcher – Next hop](https://learn.microsoft.com/en-us/azure/network-watcher/diagnose-vm-network-routing-problem)
 - [Azure Network Watcher – Effective routes](https://learn.microsoft.com/en-us/azure/network-watcher/network-watcher-ip-flow-verify-overview)
 - [Zentyal 8.1 – Documentación oficial de instalación](https://doc.zentyal.org/es/installation.html)
-- [Zentyal 8.1 – Script instalador oficial (GitHub)](https://github.com/zentyal/zentyal/blob/master/extra/ubuntu_installers/zentyal_installer_8.1.sh)
+- [Zentyal 8.1 – Script instalador del repositorio del curso (Cloud-Lab)](https://github.com/malevarro/Cloud-Lab/blob/main/Firewall/zentyal_installer_8.1.sh)
+- [Zentyal 8.1 – Script instalador oficial original (referencia)](https://github.com/zentyal/zentyal/blob/master/extra/ubuntu_installers/zentyal_installer_8.1.sh)
 - [Zentyal 8.1 – Primeros pasos y asistente de configuración](https://doc.zentyal.org/es/firststeps.html)
 - [Suricata IDS/IPS – documentación oficial](https://suricata.io/documentation/)
 - [Emerging Threats Open Ruleset](https://rules.emergingthreats.net/)
