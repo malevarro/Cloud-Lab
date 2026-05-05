@@ -3,7 +3,8 @@
 > **Curso:** Seguridad en Nubes Públicas  
 > **Institución:** Banco de la República – DSI  
 > **Nivel:** Posgrado  
-> **Uso:** Interno
+> **Uso:** Interno  
+> **Versión SO:** Ubuntu 24.04 LTS (Noble Numbat)
 
 ---
 
@@ -111,9 +112,9 @@ Rutas UDR en Spokes:
 | Subnet Spoke 1 | `WorkloadSubnet` | 10.1.0.0/24 |
 | VNet Spoke 2 | `Spoke2-VNet` | 10.2.0.0/16 |
 | Subnet Spoke 2 | `WorkloadSubnet` | 10.2.0.0/24 |
-| VM Firewall/Zentyal | `FW-Zentyal` | 2 NICs (Front + Back) – Ubuntu 22.04 |
-| VM Spoke 1 | `VM-Spoke1` | 1 NIC – Ubuntu 22.04 |
-| VM Spoke 2 | `VM-Spoke2` | 1 NIC – Ubuntu 22.04 |
+| VM Firewall/Zentyal | `FW-Zentyal` | 2 NICs (Front + Back) – Ubuntu 24.04 LTS |
+| VM Spoke 1 | `VM-Spoke1` | 1 NIC – Ubuntu 24.04 LTS |
+| VM Spoke 2 | `VM-Spoke2` | 1 NIC – Ubuntu 24.04 LTS |
 | Tamaño VM Zentyal | `Standard_B2s` | **Mínimo:** 2 vCPU / 4 GB RAM (requerido por Zentyal) |
 | Tamaño VMs Spoke | `Standard_B1ls` | Mínimo típico |
 
@@ -185,7 +186,7 @@ az network vnet create \
 
 ### 4.1 – VM Zentyal en Hub (dual NIC)
 
-Zentyal requiere **Ubuntu 22.04 LTS** y un mínimo de `Standard_B2s`. Se crean dos NICs: una para la red interna (Subnet-Front) y otra para la salida a Internet (Subnet-Back).
+Zentyal requiere **Ubuntu 24.04 LTS** y un mínimo de `Standard_B2s`. Se crean dos NICs: una para la red interna (Subnet-Front) y otra para la salida a Internet (Subnet-Back).
 
 ```bash
 # NIC Front (eth0 en Zentyal – red interna / tránsito Spokes)
@@ -218,7 +219,7 @@ az network nic update \
 az vm create \
   --resource-group RG-Networking \
   --name FW-Zentyal \
-  --image Ubuntu2204 \
+  --image Ubuntu2404 \
   --size Standard_B2s \
   --nics fw-nic-back fw-nic-front \
   --admin-username azureuser \
@@ -235,7 +236,7 @@ az vm create \
 az vm create \
   --resource-group RG-Networking \
   --name VM-Spoke1 \
-  --image Ubuntu2204 \
+  --image Ubuntu2404 \
   --size Standard_B1ls \
   --vnet-name Spoke1-VNet \
   --subnet WorkloadSubnet \
@@ -247,7 +248,7 @@ az vm create \
 az vm create \
   --resource-group RG-Networking \
   --name VM-Spoke2 \
-  --image Ubuntu2204 \
+  --image Ubuntu2404 \
   --size Standard_B1ls \
   --vnet-name Spoke2-VNet \
   --subnet WorkloadSubnet \
@@ -437,6 +438,8 @@ az network nic list-effective-nsg \
 
 ### 7.1 – Preparar acceso público a la VM
 
+Ejecutar en Azure CLI o Cloud Shell:
+
 ```bash
 # Crear IP pública estática para administración
 az network public-ip create \
@@ -468,11 +471,49 @@ FW_FRONT_IP=$(az network nic show \
 echo "FW Front IP (next-hop UDR): $FW_FRONT_IP"
 ```
 
-### 7.2 – Conectar a la VM y habilitar IP forwarding
+### 7.2 – Conectar a la VM y preparar el sistema operativo
 
-Conectarse a la VM `FW-Zentyal` mediante SSH (MobaXterm u otro cliente) usando la IP pública obtenida y el usuario `azureuser`.
+Conectarse a la VM `FW-Zentyal` mediante SSH (MobaXterm u otro cliente) con la IP pública obtenida y el usuario `azureuser`.
 
-Una vez dentro de la sesión SSH, habilitar el reenvío de paquetes IP en el kernel. El benchmark CIS indica este parámetro como crítico en sistemas que actúan como router/NVA, y advierte que debe ser explícitamente habilitado ya que el hardening estándar lo deshabilita.
+#### 7.2.1 – Forzar nomenclatura de interfaces a estilo `eth` (requerido por Zentyal)
+
+El script de instalación de Zentyal 8.1 verifica que las interfaces de red usen la nomenclatura clásica `eth0`, `eth1`, etc. Ubuntu 24.04 usa por defecto nombres predictivos (`enp3s0`, `ens4`, etc.), por lo que **es obligatorio** configurar el sistema para usar la nomenclatura tradicional antes de ejecutar el instalador.
+
+```bash
+# Configurar GRUB para deshabilitar la nomenclatura predictiva de interfaces
+sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=".*"/GRUB_CMDLINE_LINUX_DEFAULT="net.ifnames=0 biosdevname=0"/' /etc/default/grub
+
+# Aplicar la configuración de GRUB
+sudo update-grub
+
+# Reiniciar el sistema para que los cambios tomen efecto
+sudo reboot
+```
+
+Después del reinicio, volver a conectarse por SSH y verificar que las interfaces ahora usan la nomenclatura `eth`:
+
+```bash
+ip -br a
+# Salida esperada (ejemplo):
+# lo               UNKNOWN   127.0.0.1/8
+# eth0             UP        10.0.1.X/24    ← NIC Back (primaria en Azure)
+# eth1             UP        10.0.0.X/24    ← NIC Front
+```
+
+> **Nota:** Si el comando anterior no muestra interfaces con prefijo `eth`, el instalador de Zentyal abortará con el mensaje `The network interface naming is not using 'eth'`. Revisar la configuración de GRUB y reiniciar nuevamente.
+
+#### 7.2.2 – Actualizar el sistema completamente
+
+El script de instalación de Zentyal 8.1 verifica que el sistema esté completamente actualizado (`apt dist-upgrade`) antes de continuar. Si hay paquetes pendientes, el instalador aborta.
+
+```bash
+sudo apt update
+sudo apt dist-upgrade -y
+```
+
+#### 7.2.3 – Habilitar IP forwarding en el kernel
+
+El reenvío IP debe habilitarse para que el sistema actúe como router/NVA. El benchmark CIS indica este parámetro como crítico en dispositivos que operan como router, y advierte que el hardening estándar lo deshabilita por defecto.
 
 ```bash
 sudo tee /etc/sysctl.d/99-nva-forwarding.conf >/dev/null <<'EOF'
@@ -483,60 +524,112 @@ net.ipv4.conf.default.rp_filter=0
 EOF
 
 sudo sysctl --system
-```
 
-Verificar que el forwarding esté activo:
-
-```bash
+# Verificar que el forwarding esté activo
 sysctl net.ipv4.ip_forward
 # Salida esperada: net.ipv4.ip_forward = 1
 ```
 
-### 7.3 – Instalar Zentyal Server Development Edition
+### 7.3 – Instalar Zentyal Server 8.1 Development Edition
 
-Zentyal se instala desde su repositorio oficial sobre Ubuntu 22.04 LTS.
+Zentyal 8.1 soporta oficialmente **Ubuntu 24.04 LTS (Noble Numbat)**. La instalación se realiza mediante el script oficial alojado en GitHub.
+
+#### 7.3.1 – Descargar el script de instalación
 
 ```bash
-# Actualizar el sistema
-sudo apt-get update && sudo apt-get upgrade -y
-
-# Descargar el instalador oficial de Zentyal
-wget -q https://zentyal.com/zentyal-installer.sh -O zentyal-installer.sh
-
-# Revisar el script antes de ejecutarlo (buena práctica de seguridad)
-less zentyal-installer.sh
-
-# Ejecutar el instalador
-sudo bash zentyal-installer.sh
+# Descargar el script oficial de Zentyal 8.1 para Ubuntu
+wget https://raw.githubusercontent.com/zentyal/zentyal/master/extra/ubuntu_installers/zentyal_installer_8.1.sh
 ```
 
-Durante la instalación se solicitará la selección de módulos. Para este laboratorio seleccionar:
+#### 7.3.2 – Revisar el script antes de ejecutarlo
 
-| Módulo | Función |
+```bash
+# Buena práctica: revisar el contenido del script antes de ejecutarlo como root
+less zentyal_installer_8.1.sh
+```
+
+El script realiza las siguientes verificaciones previas a la instalación y aborta si alguna falla:
+
+| Verificación | Descripción |
 |---|---|
-| **Firewall** | Control de tráfico de red (requerido) |
-| **Gateway / NAT** | Enrutamiento y NAT hacia Internet (requerido) |
-| **IDS / IPS** | Detección/prevención de intrusiones con Suricata (requerido) |
-| **Network** | Configuración de interfaces de red |
+| Versión de Ubuntu | Requiere exactamente Ubuntu 24.04.x LTS |
+| Paquetes rotos | Intenta reparar con `dpkg --configure -a`; aborta si no puede |
+| Espacio en disco | Mínimo 50 MB en `/boot` y 350 MB en `/` y `/var` |
+| Sistema actualizado | Requiere que no haya paquetes pendientes (`apt dist-upgrade`) |
+| Conectividad a Internet | Prueba de ping a `google.es` |
+| Puerto 8443 libre | Verifica que el puerto del webadmin no esté en uso |
+| Nomenclatura de interfaces | Requiere interfaces con prefijo `eth` |
 
-> La instalación puede tomar entre **10 y 20 minutos** dependiendo de la conectividad del nodo.
+#### 7.3.3 – Otorgar permisos de ejecución y ejecutar el instalador
 
-### 7.4 – Acceder al panel de administración web
+```bash
+# Dar permisos de ejecución al script
+chmod +x zentyal_installer_8.1.sh
+
+# Ejecutar el instalador con privilegios de root
+sudo ./zentyal_installer_8.1.sh
+```
+
+El instalador solicitará una única confirmación interactiva al inicio:
+
+```
+Do you want to install the Zentyal Graphical environment? (n|y)
+```
+
+Para este laboratorio responder **`n`** (sin entorno gráfico), ya que el acceso se realiza únicamente mediante la interfaz web y SSH. Responder `y` solo si se requiere escritorio local en la VM.
+
+El proceso realiza automáticamente:
+
+1. Añade el repositorio oficial de Zentyal (`packages.zentyal.org`) con su clave GPG.
+2. Añade el repositorio de Firefox (requerido por el módulo `zenbuntu-desktop` si se eligió entorno gráfico).
+3. Añade el repositorio de Docker (requerido por módulos que dependen de contenedores).
+4. Instala los paquetes base: `zentyal` y `zenbuntu-core`.
+5. Deshabilita `cloud-init` al finalizar.
+
+> La instalación puede tomar entre **10 y 20 minutos** dependiendo de los recursos de la VM y la conectividad de red.
+
+Al finalizar, el instalador muestra:
+
+```
+Installation complete, you can access the Zentyal Web Interface at:
+  * https://<zentyal-ip-address>:8443/
+```
+
+### 7.4 – Acceder al asistente de configuración inicial
 
 Una vez completada la instalación, Zentyal expone su interfaz de administración en HTTPS por el puerto **8443**.
 
 ```
 URL de acceso: https://<IP_PUBLICA_FW>:8443
-Usuario: azureuser
-Contraseña: la definida al crear la VM
+Usuario:       azureuser  (o cualquier usuario del sistema en el grupo sudo)
+Contraseña:    la definida al crear la VM en Azure
 ```
 
-Abrir el navegador, acceder a la URL anterior y aceptar la advertencia de certificado autofirmado. El asistente de configuración inicial guiará los primeros pasos.
+Abrir el navegador, navegar a la URL anterior y **aceptar la advertencia de certificado autofirmado**. Esto es esperado: Zentyal genera su propio certificado TLS durante la instalación.
 
 ```bash
 # Verificar que el servicio web de Zentyal esté activo (desde SSH)
 sudo systemctl status zentyal.webadmin
 ```
+
+> **Nota de acceso:** Zentyal permite autenticarse con cualquier usuario del sistema que pertenezca al grupo `sudo`. El usuario `azureuser` creado al provisionar la VM en Azure cumple este requisito por defecto.
+
+Al acceder por primera vez, se presenta el **asistente de configuración inicial** que guía la selección de módulos y la configuración de red. Es importante **no reiniciar el servidor** sin haber configurado el módulo de Red a través del asistente; de lo contrario, se podría perder la configuración de red y requerir acceso manual por consola serie de Azure.
+
+#### Selección de módulos en el asistente
+
+Cuando el asistente solicite los módulos a instalar, seleccionar:
+
+| Módulo | Función en el laboratorio |
+|---|---|
+| **Firewall** | Control de tráfico de red – filtrado de paquetes (requerido) |
+| **Gateway / NAT** | Enrutamiento y NAT hacia Internet (requerido) |
+| **IDS / IPS** | Detección/prevención de intrusiones con Suricata (requerido) |
+| **Network** | Configuración de interfaces de red |
+
+Zentyal gestionará automáticamente las dependencias entre módulos e instalará los paquetes necesarios al aplicar la selección.
+
+> Si se requiere activar una **Edición Comercial** o un **Trial gratuito de 15 días**, se puede hacer después del asistente en **Sistema → Edición del Servidor → Clave de Activación**. Para este laboratorio, la **Development Edition** (gratuita, sin clave) es suficiente.
 
 ### 7.5 – Configurar las interfaces de red en Zentyal
 
@@ -544,10 +637,10 @@ En el panel web: **Network → Interfaces** (o durante el asistente inicial).
 
 | Interfaz del SO | NIC Azure | Rol en Zentyal | Subred |
 |---|---|---|---|
-| `eth0` | `fw-nic-back` (primaria) | **External** | Subnet-Back 10.0.1.0/24 |
+| `eth0` | `fw-nic-back` (NIC primaria en Azure) | **External** | Subnet-Back 10.0.1.0/24 |
 | `eth1` | `fw-nic-front` | **Internal** | Subnet-Front 10.0.0.0/24 |
 
-> ⚠️ **Verificar la asignación real de interfaces** ejecutando `ip -br a` en la sesión SSH. En Azure la NIC primaria (primera en la lista al crear la VM, `fw-nic-back`) suele aparecer como `eth0`. Asignar el rol **External** a la interfaz conectada a Subnet-Back (con la IP pública/egress) y el rol **Internal** a la interfaz conectada a Subnet-Front.
+> ⚠️ **Verificar la asignación real de interfaces** ejecutando `ip -br a` en la sesión SSH antes de configurar los roles en Zentyal. En Azure, la primera NIC listada al crear la VM (`fw-nic-back`) es la NIC primaria del SO y se presenta como `eth0`. Asignar el rol **External** a la interfaz conectada a Subnet-Back y el rol **Internal** a la conectada a Subnet-Front.
 
 ---
 
@@ -1007,8 +1100,10 @@ az network nic list-effective-nsg \
 - [Hub-spoke network topology in Azure – Microsoft Learn](https://learn.microsoft.com/en-us/azure/architecture/networking/architecture/hub-spoke)
 - [Azure Network Watcher – Next hop](https://learn.microsoft.com/en-us/azure/network-watcher/diagnose-vm-network-routing-problem)
 - [Azure Network Watcher – Effective routes](https://learn.microsoft.com/en-us/azure/network-watcher/network-watcher-ip-flow-verify-overview)
-- [Zentyal Server Development Edition](https://zentyal.com/community/)
+- [Zentyal 8.1 – Documentación oficial de instalación](https://doc.zentyal.org/es/installation.html)
+- [Zentyal 8.1 – Script instalador oficial (GitHub)](https://github.com/zentyal/zentyal/blob/master/extra/ubuntu_installers/zentyal_installer_8.1.sh)
+- [Zentyal 8.1 – Primeros pasos y asistente de configuración](https://doc.zentyal.org/es/firststeps.html)
 - [Suricata IDS/IPS – documentación oficial](https://suricata.io/documentation/)
 - [Emerging Threats Open Ruleset](https://rules.emergingthreats.net/)
 - [nmap – referencia oficial](https://nmap.org/book/man.html)
-- [CIS Ubuntu Linux 22.04 LTS Benchmark](https://www.cisecurity.org/benchmark/ubuntu_linux)
+- [CIS Ubuntu Linux 24.04 LTS Benchmark](https://www.cisecurity.org/benchmark/ubuntu_linux)
