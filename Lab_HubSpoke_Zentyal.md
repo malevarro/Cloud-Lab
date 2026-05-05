@@ -475,7 +475,7 @@ echo "FW Front IP (next-hop UDR): $FW_FRONT_IP"
 
 Conectarse a la VM `FW-Zentyal` mediante SSH (MobaXterm u otro cliente) con la IP pública obtenida y el usuario `azureuser`.
 
-#### 7.2.1 – Forzar nomenclatura de interfaces a estilo `eth` (requerido por Zentyal)
+#### 7.2.1 – OPCIONAL - Forzar nomenclatura de interfaces a estilo `eth` (requerido por Zentyal)
 
 El script de instalación de Zentyal 8.1 verifica que las interfaces de red usen la nomenclatura clásica `eth0`, `eth1`, etc. Ubuntu 24.04 usa por defecto nombres predictivos (`enp3s0`, `ens4`, etc.), por lo que **es obligatorio** configurar el sistema para usar la nomenclatura tradicional antes de ejecutar el instalador.
 
@@ -538,15 +538,10 @@ Zentyal 8.1 soporta oficialmente **Ubuntu 24.04 LTS (Noble Numbat)**. La instala
 
 ```bash
 # Descargar el script oficial de Zentyal 8.1 para Ubuntu
-wget https://raw.githubusercontent.com/zentyal/zentyal/master/extra/ubuntu_installers/zentyal_installer_8.1.sh
+wget https://github.com/malevarro/Cloud-Lab/blob/main/Firewall/zentyal_installer_8.1.sh
 ```
 
 #### 7.3.2 – Revisar el script antes de ejecutarlo
-
-```bash
-# Buena práctica: revisar el contenido del script antes de ejecutarlo como root
-less zentyal_installer_8.1.sh
-```
 
 El script realiza las siguientes verificaciones previas a la instalación y aborta si alguna falla:
 
